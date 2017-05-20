@@ -1,0 +1,24 @@
+﻿mixin bindData(o)
+    each i in o
+        if i !== "admin"
+            li
+                if typeof(i) == "object"
+                    span.filePath= i.name
+                    ul.mktre
+                        +bindData(i.sub)
+                else
+                    button.treeBtn.btn.btn-primary.btn-sm(style="padding:.2em .5em .2em .5em")= i
+                    button.editBtn.fa.fa-pencil(type="button")
+                    button.deleteBtn.fa.fa-trash-o(type="button")
+
+ul.mktre.masthead-nav
+    li.parent 
+        span.filePath Views
+        ul
+            +bindData(views)
+    li.parent 
+        span.filePath Public
+        ul
+            +bindData(files)
+
+
