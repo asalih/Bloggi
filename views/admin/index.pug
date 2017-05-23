@@ -1,4 +1,48 @@
 ﻿extends admin_layout
 
 block content
-    iframe#documents(src="/admin/content")
+    nav.navbar.navbar-light.bg-faded
+        ul.nav.nav-pills
+            li.nav-item
+                a.nav-link.save(href="javascript:void(0)") save
+            li.nav-item
+                a.nav-link.cls(href="javascript:void(0)") close
+            li.nav-item
+                a.nav-link.delete(href="javascript:void(0)") delete
+    #editor.editor.output
+    div.row
+        div.col
+            span#currentFilePath
+        div.col(style="text-align:right")
+            | Theme: 
+            select#ace-theme(size='1')
+                optgroup(label='bright')
+                  option(value='chrome', selected='') chrome
+                  option(value='clouds') clouds
+                  option(value='crimson_editor') crimson_editor
+                  option(value='dawn') dawn
+                  option(value='dreamweaver') dreamweaver
+                  option(value='eclipse') eclipse
+                  option(value='github') github
+                  option(value='solarized_light') solarized_light
+                  option(value='textmate') textmate
+                  option(value='tomorrow') tomorrow
+                  option(value='xcode') xcode
+                optgroup(label='dark')
+                  option(value='clouds_midnight') clouds_midnight
+                  option(value='cobalt') cobalt
+                  option(value='idle_fingers') idle_fingers
+                  option(value='kr_theme') kr_theme
+                  option(value='merbivore') merbivore
+                  option(value='merbivore_soft') merbivore_soft
+                  option(value='mono_industrial') mono_industrial
+                  option(value='monokai') monokai
+                  option(value='pastel_on_dark') pastel_on_dark
+                  option(value='solarized_dark') solarized_dark
+                  option(value='terminal') terminal
+                  option(value='tomorrow_night') tomorrow_night
+                  option(value='tomorrow_night_blue') tomorrow_night_blue
+                  option(value='tomorrow_night_bright') tomorrow_night_bright
+                  option(value='tomorrow_night_eighties') tomorrow_night_eighties
+                  option(value='twilight') twilight
+                  option(value='vibrant_ink') vibrant_ink

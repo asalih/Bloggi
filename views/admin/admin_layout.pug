@@ -10,6 +10,7 @@ html
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     script(src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript")
     link(rel='stylesheet', type='text/css', href='/admin/main.css')
     script(src="/admin/admin.js" type="text/javascript")
   body
@@ -21,7 +22,17 @@ html
             span.input-group-addon
                 i.fa.fa-folder-open-o
             input#currentPath.form-control(type='text', aria-label='Text input with checkbox' value="/")
-        br
+            .input-group-btn
+              button.btn.btn-secondary.fa.fa-plus(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+              .dropdown-menu.dropdown-menu-right
+                a.dropdown-item(href='#')
+                    input#fileAdding(type="text")
+                div(style="text-align:right;padding-right:1.6em")
+                    button#btnAddFolder.btn.btn-sm.btn-active(style="margin-right:0.3em") add folder
+                    button#btnAddFile.btn.btn-sm.btn-active add file
+                div#addMsg(style="font-size:0.65em;margin-left:2.3em;padding-top:0.4em")
+
+
         div.tree-container
             
 
@@ -29,7 +40,7 @@ html
       block content
       hr
       footer
-        p &copy; #{year} - My Nodejs/Pug Application
+        p &copy; #{year} - Bloggi App
 
 
 

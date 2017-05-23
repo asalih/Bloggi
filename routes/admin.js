@@ -23,14 +23,59 @@ router.get("/getDirectories", function (req, res) {
     res.render("admin/tree", { views: viewTree, files: staticTree });
 });
 
-router.get("/content", function (req, res) {
-    var pth = path.join(__dirname, "..//" , req.query.c);
-    fs.readFile(pth, "utf8", (err, data) => {
-        if (err) throw err;
-        res.send(data);
-    });
-    
+router.post("/add", function (req, res) {
+    var pth = path.join(__dirname, "..//", req.body.pth);
+    if (req.body.type == "folder") {
+        fs.exists(pth, function (exists) {
+            if (exists) {
+                res.send("hasFolder");
+            }
+            else {
+                fs.mkdir(pth, function (err, data) {
+                    if (err) throw err;
+                    res.send(data);
+                });
+            }
+        });
+    }
+    else {
+        fs.exists(pth, function (exists) {
+            if (exists) {
+                res.send("hasFile");
+            }
+            else {
+                fs.writeFile(pth, "", function (err, data) {
+                    if (err) throw err;
+                    res.send(data);
+                });
+            }
+        })
+
+    }
 });
+
+router.route("/content")
+    .get(function (req, res) {
+        var pth = path.join(__dirname, "..//", req.query.pth);
+        fs.readFile(pth, "utf8", (err, data) => {
+            if (err) throw err;
+            res.send(data);
+        });
+    })
+    .post(function (req, res) {
+        var pth = path.join(__dirname, "..//", req.body.pth);
+        fs.writeFile(pth, req.body.file, "utf8", function (err, data) {
+            if (err) throw err;
+            res.send(data);
+        });
+    })
+    .delete(function (req, res) {
+        var pth = path.join(__dirname, "..//", req.body.pth);
+        fs.unlink(pth, function (err, data) {
+            if (err) throw err;
+            res.send(data);
+        });
+    });
 
 router.route('/login')
     .get(function (req, res) {
