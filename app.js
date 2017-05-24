@@ -14,6 +14,7 @@ var admin = require("./routes/admin")
 var app = express();
 
 global.routingTable = {};
+global.settings = {};
 global.loadRoutes = function () {
     var pth = path.join(__dirname, "routingTable.json");
     fs.readFile(pth, "utf8", function (e, data) {
@@ -21,11 +22,18 @@ global.loadRoutes = function () {
         routingTable = JSON.parse(data);
     });
 }
+global.loadSettings = function () {
+    var pth = path.join(__dirname, "settings.json");
+    settings = JSON.parse(fs.readFileSync(pth, "utf8"));
+}
 global.loadRoutes();
+global.loadSettings();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+//app.set('view engine', settings.viewEngine);
+app.engine('pug', require('pug').__express);
+app.engine('html', require('ejs').renderFile);
 
 var staticPath = path.join(__dirname, 'public');
 app.set("staticPath", staticPath);
@@ -34,7 +42,7 @@ app.set("staticPath", staticPath);
 app.use(function (req, res, next) {
     var path = routingTable[req.url.split("?").shift()];
     if (path != undefined) {
-        res.render(path, { title: 'Express' });
+        res.render(path, { title: settings.appTitle });
     }
     else {
         next();

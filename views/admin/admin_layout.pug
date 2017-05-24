@@ -18,11 +18,16 @@ html
         h1.masthead-title
             a(href="/") Manage
         hr.masthead-hr
-        div
+        div.navIt
+            a#settings.btn.btn-link.btn-lg(href="javascript:void(0);" style="padding-left:0px;margin-bottom:5px;")
+                i.fa.fa-cog
+                |  Settings
+            i.fa.fa-angle-right.ri
+        div.navIt
             a#editRouting.btn.btn-link.btn-lg(href="javascript:void(0);" style="padding-left:0px;margin-bottom:5px;")
                 i.fa.fa-link
                 |  Edit Routing Table
-                i.fa.fa-angle-right(style="margin-left:4.2rem")
+            i.fa.fa-angle-right.ri
         div.input-group.input-group-sm
             span.input-group-addon
                 i.fa.fa-folder-open-o

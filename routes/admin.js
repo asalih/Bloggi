@@ -9,7 +9,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.render('admin/index');
+    res.render('admin/index.pug');
 });
 
 router.get("/getDirectories", function (req, res) {
@@ -20,7 +20,7 @@ router.get("/getDirectories", function (req, res) {
     var staticTree = walk(staticPath);
 
     //res.send([viewTree, staticTree]);
-    res.render("admin/tree", { views: viewTree, files: staticTree });
+    res.render("admin/tree.pug", { views: viewTree, files: staticTree });
 });
 
 router.post("/add", function (req, res) {
@@ -104,9 +104,27 @@ router.route("/routes")
             res.send(data);
         });
     });
+
+router.route("/settings")
+    .get(function (req, res) {
+        var pth = path.join(__dirname, "..//settings.json");
+        fs.readFile(pth, "utf8", (err, data) => {
+            if (err) throw err;
+            res.send(data);
+        });
+    })
+    .post(function (req, res) {
+        var pth = path.join(__dirname, "..//settings.json");
+        fs.writeFile(pth, req.body.file, "utf8", function (err, data) {
+            if (err) throw err;
+
+            loadSettings();
+            res.send(data);
+        });
+    });
 router.route('/login')
     .get(function (req, res) {
-        res.render('admin/login');
+        res.render('admin/login.pug');
     })
     .post(function (req, res) {
         //user logic here

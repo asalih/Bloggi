@@ -92,6 +92,20 @@ $(document).ready(function () {
         });
     });
 
+    $("#settings").click(function () {
+        clear();
+        editingPath = "settings";
+        $.ajax({
+            url: "/admin/settings",
+            dataType: "text",
+            success: function (data) {
+                toggleMode(".json");
+                editor.setValue(data);
+                editor.clearSelection();
+            }
+        });
+    });
+
     loadTree();
 
 });
@@ -224,6 +238,7 @@ function onTreeLoaded() {
     $(".renameBtn").click(function () {
         $(this).prev().removeAttr("contentEditable");
     });
+    
 
     $(".tRow").mouseover(function () {
         $(this).find(".trb").css("display", "inline-block");
@@ -249,7 +264,9 @@ function onTreeLoaded() {
                 rename(path, newPath, "file");
             }
         }
-    });
+        });
+
+
 
 }
 

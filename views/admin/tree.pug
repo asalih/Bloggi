@@ -3,7 +3,7 @@
         if i !== "admin"
             if typeof(i) == "object"
                 li
-                    span.filePath= i.name
+                    span.filePath.folder= i.name
                     ul.mktre
                         +bindData(i.sub)
             else

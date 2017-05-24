@@ -209,3 +209,8 @@ h1, h2, h3 {
 .parent {
     padding-left:5px !important;
 }
+.navIt .ri {
+    float: right;
+    padding-top: 1rem;
+    padding-right: 0.65rem;
+}
