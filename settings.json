@@ -1,0 +1,7 @@
+{
+  "appTitle": "Bloggi App",
+  "user": {
+    "userName": "admin",
+    "passwordHash": ""
+  }
+}
