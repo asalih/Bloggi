@@ -2,11 +2,13 @@ var editor;
 var editingPath = "";
 $(document).ready(function () {
     editor = ace.edit("editor");
-
     $("#ace-theme").change(function () { editor.setTheme('ace/theme/' + $(this).val().toLowerCase()); });
 
     $(".save").click(function () {
-        if (editingPath != "") {
+        if (editingPath == "") {
+            return;
+        }
+        if (editingPath != "routingTable") {
             $(".save").text("saving");
             $.ajax({
                 url: "/admin/content",
@@ -18,20 +20,35 @@ $(document).ready(function () {
                 }
             });
         }
+        else {
+            $(".save").text("saving");
+            $.ajax({
+                url: "/admin/routes",
+                type: "POST",
+                data: { file: editor.getValue() },
+                dataType: "text",
+                success: function (data) {
+                    $(".save").text("save");
+                }
+            });
+
+        }
     });
 
     $(".cls").click(function () {
-        editingPath = "";
-        $("#currentFilePath").text("");
-        editor.setValue("");
+        clear();
     });
 
     $(".delete").click(function () {
-        if (editingPath != "") {
+        if (editingPath != "" || editingPath != "routingTable") {
+            if (!confirm("Are you sure?")) {
+                return;
+            }
+
             $(".delete").text("deleting");
             $("#currentFilePath").text("");
             deleteFile(editingPath);
-            
+
         }
     });
 
@@ -47,6 +64,7 @@ $(document).ready(function () {
         }
 
     });
+
     $("#btnAddFolder").click(function (e) {
         var name = $("#fileAdding").val();
         e.stopPropagation();
@@ -59,9 +77,25 @@ $(document).ready(function () {
         }
 
     });
+
+    $("#editRouting").click(function () {
+        clear();
+        editingPath = "routingTable";
+        $.ajax({
+            url: "/admin/routes",
+            dataType: "text",
+            success: function (data) {
+                toggleMode(".json");
+                editor.setValue(data);
+                editor.clearSelection();
+            }
+        });
+    });
+
     loadTree();
 
 });
+
 function deleteFile(editingPath) {
     $.ajax({
         url: "/admin/content",
@@ -98,6 +132,23 @@ function add(name, type) {
         }
     });
 
+}
+
+function rename(path, newPath, type) {
+    $.ajax({
+        url: "/admin/rename",
+        type: "POST",
+        data: { pth: path, newPth: newPath, type: type },
+        dataType: "text",
+        success: function (data) {
+            if (data == "hasFile") {
+                $("#addMsg").text("Has file with the same name.");
+            }
+            else if (data == "hasFolder") {
+                $("#addMsg").text("Has folder with the same name.")
+            }
+        }
+    });
 }
 
 function activate(i) {
@@ -163,15 +214,49 @@ function onTreeLoaded() {
         });
     });
     $(".deleteBtn").click(function () {
+        if (!confirm("Are you sure?")) {
+            return;
+        }
         activate(this);
         var path = $("#currentPath").val() + "/" + $(this).parent().find(".treeBtn").text();
         deleteFile(path);
     });
+    $(".renameBtn").click(function () {
+        $(this).prev().removeAttr("contentEditable");
+    });
 
     $(".tRow").mouseover(function () {
         $(this).find(".trb").css("display", "inline-block");
-    }).mouseout(function () { $(this).find(".trb").css("display", "none"); });
+    })
+        .mouseout(function () { $(this).find(".trb").css("display", "none"); });
 
+    var editingName = "";
+    $(".treeBtn").dblclick(function () {
+        $(this).attr("contentEditable", "true");
+        editingName = $(this).text();
+        $(this).next().show();
+    }).blur(function () {
+        var elem = $(this);
+        if (elem.attr("contentEditable") == "true") {
+            elem.removeAttr("contentEditable");
+            elem.next().hide();
+            var name = elem.text();
+
+            var path = $("#currentPath").val() + "/" + editingName;
+            var newPath = $("#currentPath").val() + "/" + name;
+
+            if (editingName != name) {
+                rename(path, newPath, "file");
+            }
+        }
+    });
+
+}
+
+function clear() {
+    editingPath = "";
+    $("#currentFilePath").text("");
+    editor.setValue("");
 }
 
 var currentMode = "";

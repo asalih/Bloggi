@@ -1,10 +1,4 @@
-﻿
-
-/*
- * Global resets
- */
-
-html {
+﻿html {
     font-size: 18px;
 }
 
@@ -21,12 +15,6 @@ a:hover {
 h1, h2, h3 {
     font-weight: 300;
 }
-
-
-/*
- * Masthead
- */
-
 .masthead {
     padding: 1.5rem;
     padding-top: 0px !important;
@@ -51,11 +39,6 @@ h1, h2, h3 {
     .masthead-title a {
         color: #563d7c;
     }
-
-
-
- 
-/* Dividers */
 .masthead-hr {
     margin: 1rem 0;
     border-top-color: #eee;
@@ -85,17 +68,6 @@ h1, h2, h3 {
         width: 25%;
     }
 }
-
-
- 
-
-
-/*
- * Listing and pages
- *
- * Series of entries.
- */
-
 .listing {
     
     padding-left: 1.5rem;
@@ -121,12 +93,6 @@ h1, h2, h3 {
         margin-right: 2.5%;
     }
 }
-
-       
-/*
- * List page
- */
-
 .list {
     padding-left: 0;
     list-style: none;
@@ -196,7 +162,11 @@ h1, h2, h3 {
     margin-right: 5px;
     cursor:default;
 }
-
+.tree-container {
+    max-height:100%;
+    overflow-x:hidden;
+    margin-top:5px;
+}
 .tree li a {
     text-decoration: none;
     color: #369;
@@ -222,7 +192,7 @@ h1, h2, h3 {
 .fa-2{
     font-size: 1.4em;
 }
-.editBtn, .deleteBtn {
+.editBtn, .deleteBtn, .renameBtn {
     cursor: pointer;
     margin: 0em 0.21em 0em 0.21em !important;
 }
@@ -233,6 +203,9 @@ h1, h2, h3 {
     height: 400px;
 }
 
-.trb{
+.trb, .trbe{
     display:none;
+}
+.parent {
+    padding-left:5px !important;
 }

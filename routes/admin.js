@@ -25,23 +25,17 @@ router.get("/getDirectories", function (req, res) {
 
 router.post("/add", function (req, res) {
     var pth = path.join(__dirname, "..//", req.body.pth);
-    if (req.body.type == "folder") {
-        fs.exists(pth, function (exists) {
-            if (exists) {
-                res.send("hasFolder");
-            }
-            else {
+
+    fs.exists(pth, function (exists) {
+        if (exists) {
+            res.send(req.body.type == "folder" ? "hasFolder" : "hasFile");
+        }
+        else {
+            if (req.body.type == "folder") {
                 fs.mkdir(pth, function (err, data) {
                     if (err) throw err;
                     res.send(data);
                 });
-            }
-        });
-    }
-    else {
-        fs.exists(pth, function (exists) {
-            if (exists) {
-                res.send("hasFile");
             }
             else {
                 fs.writeFile(pth, "", function (err, data) {
@@ -49,9 +43,25 @@ router.post("/add", function (req, res) {
                     res.send(data);
                 });
             }
-        })
+        }
+    });
 
-    }
+});
+
+router.post("/rename", function (req, res) {
+    var pth = path.join(__dirname, "..//", req.body.pth);
+    var newPth = path.join(__dirname, "..//", req.body.newPth);
+    fs.exists(newPth, function (exists) {
+        if (exists) {
+            res.send(req.body.type == "folder" ? "hasFolder" : "hasFile");
+        }
+        else {
+            fs.rename(pth, newPth, function (err, data) {
+                if (err) throw err;
+                res.send(data);
+            });
+        }
+    });
 });
 
 router.route("/content")
@@ -77,6 +87,23 @@ router.route("/content")
         });
     });
 
+router.route("/routes")
+    .get(function (req, res) {
+        var pth = path.join(__dirname, "..//routingTable.json");
+        fs.readFile(pth, "utf8", (err, data) => {
+            if (err) throw err;
+            res.send(data);
+        });
+    })
+    .post(function (req, res) {
+        var pth = path.join(__dirname, "..//routingTable.json");
+        fs.writeFile(pth, req.body.file, "utf8", function (err, data) {
+            if (err) throw err;
+
+            loadRoutes();
+            res.send(data);
+        });
+    });
 router.route('/login')
     .get(function (req, res) {
         res.render('admin/login');

@@ -18,6 +18,11 @@ html
         h1.masthead-title
             a(href="/") Manage
         hr.masthead-hr
+        div
+            a#editRouting.btn.btn-link.btn-lg(href="javascript:void(0);" style="padding-left:0px;margin-bottom:5px;")
+                i.fa.fa-link
+                |  Edit Routing Table
+                i.fa.fa-angle-right(style="margin-left:4.2rem")
         div.input-group.input-group-sm
             span.input-group-addon
                 i.fa.fa-folder-open-o
@@ -25,7 +30,7 @@ html
             .input-group-btn
               button.btn.btn-secondary.fa.fa-plus(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               .dropdown-menu.dropdown-menu-right
-                a.dropdown-item(href='#')
+                a.dropdown-item(href='javascript:void(0)')
                     input#fileAdding(type="text")
                 div(style="text-align:right;padding-right:1.6em")
                     button#btnAddFolder.btn.btn-sm.btn-active(style="margin-right:0.3em") add folder
