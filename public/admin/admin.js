@@ -1,5 +1,6 @@
 var editor;
 var editingPath = "";
+Dropzone.autoDiscover = false;
 $(document).ready(function () {
     editor = ace.edit("editor");
     $("#ace-theme").change(function () { editor.setTheme('ace/theme/' + $(this).val().toLowerCase()); });
@@ -8,7 +9,7 @@ $(document).ready(function () {
         if (editingPath == "") {
             return;
         }
-        if (editingPath != "routingTable") {
+        if (editingPath != "routingTable" && editingPath != "settings") {
             $(".save").text("saving");
             $.ajax({
                 url: "/admin/content",
@@ -22,8 +23,13 @@ $(document).ready(function () {
         }
         else {
             $(".save").text("saving");
+            var url = "routes";
+            if (editingPath == "settings") {
+                url = "settings"
+            }
+
             $.ajax({
-                url: "/admin/routes",
+                url: "/admin/" + url,
                 type: "POST",
                 data: { file: editor.getValue() },
                 dataType: "text",
@@ -40,7 +46,7 @@ $(document).ready(function () {
     });
 
     $(".delete").click(function () {
-        if (editingPath != "" || editingPath != "routingTable") {
+        if (editingPath != "" || editingPath != "routingTable" || editingPath != "settings") {
             if (!confirm("Are you sure?")) {
                 return;
             }
@@ -104,6 +110,22 @@ $(document).ready(function () {
                 editor.clearSelection();
             }
         });
+    });
+
+    $('#dropzone').dropzone({
+        url: "/admin/fileUpload",
+        addRemoveLinks: true,
+        autoProcessQueue: true,
+        previewsContainer: '#dropzonePreview',
+        init: function () {
+            this.on("sending", function (file, xhr, formData) {
+                formData.append("currentPath", $("#currentPath").val());
+            });
+            this.on("success", function (file, xhr, formData) {
+                loadTree();
+            });
+
+        },
     });
 
     loadTree();
@@ -214,9 +236,13 @@ function onTreeLoaded() {
         activate(this);
 
         var path = $("#currentPath").val() + "/" + $(this).parent().find(".treeBtn").text();
-        toggleMode(path);
+        
         editingPath = path;
         $("#currentFilePath").text(editingPath);
+        var readable = toggleMode(path);
+        if (!readable){
+            return;
+        }
 
         $.ajax({
             url: "/admin/content?pth=" + path,
@@ -238,7 +264,7 @@ function onTreeLoaded() {
     $(".renameBtn").click(function () {
         $(this).prev().removeAttr("contentEditable");
     });
-    
+
 
     $(".tRow").mouseover(function () {
         $(this).find(".trb").css("display", "inline-block");
@@ -264,7 +290,7 @@ function onTreeLoaded() {
                 rename(path, newPath, "file");
             }
         }
-        });
+    });
 
 
 
@@ -283,6 +309,18 @@ function toggleMode(path) {
     var ext = path.split('.').pop();
     var mode = "";
 
+    if (/jpg|jpeg|gif|png/gi.test(ext)) {
+
+        $("#editor").hide();
+        $("#imagePrev").show();
+
+        $("#imagePrev>.card-img-top").attr("src", path.replace(/\/Public|\/public/, ""));
+
+        return false;
+    }
+
+    $("#editor").show();
+    $("#imagePrev").hide();
     switch (ext) {
         case "pug":
             mode = "jade";
@@ -302,6 +340,7 @@ function toggleMode(path) {
         case "json":
             mode = "json";
             break;
+        
         default:
             mode = "text"
             break;
@@ -311,7 +350,7 @@ function toggleMode(path) {
         editor.getSession().setMode(root + mode);
         currentMode = mode;
     }
-
+    return true;
 
 }
 

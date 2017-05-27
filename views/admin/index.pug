@@ -10,6 +10,10 @@ block content
             li.nav-item
                 a.nav-link.delete(href="javascript:void(0)") delete
     #editor.editor.output
+    #imagePrev.card
+        img.card-img-top
+        div.card-block
+            p.card-text
     div.row
         div.col
             span#currentFilePath
@@ -46,3 +50,6 @@ block content
                   option(value='tomorrow_night_eighties') tomorrow_night_eighties
                   option(value='twilight') twilight
                   option(value='vibrant_ink') vibrant_ink
+
+    div#dropzonePreview.dropzone.row.nodstyle
+        

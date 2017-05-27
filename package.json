@@ -18,6 +18,7 @@
     "morgan": "^1.7.0",
     "pug": "^2.0.0-beta6",
     "serve-favicon": "^2.3.0",
-    "ejs": "^2.5.6"
+    "ejs": "^2.5.6",
+    "express-fileupload": "^0.1.3"
   }
 }

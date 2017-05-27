@@ -131,6 +131,23 @@ router.route('/login')
         req.session.auth = true;
         res.redirect("/admin");
     });
+router.post("/fileUpload", function (req, res) {
+    var fp = req.body.currentPath;
+
+    if (fp != undefined) {
+        let sampleFile = req.files.file;
+        var fname = path.join(__dirname, "../" + fp + "/" + sampleFile.name);
+        // Use the mv() method to place the file somewhere on your server 
+        sampleFile.mv(fname, function (err) {
+            if (err)
+                return res.status(500).send(err);
+
+            res.send('File uploaded!');
+        });
+    }
+
+     
+});
 
 function walk(dirPath) {
     var views = fs.readdirSync(dirPath);
@@ -142,7 +159,11 @@ function walk(dirPath) {
 
         var stat = fs.lstatSync(fp);
         if (stat && stat.isDirectory()) {
-            views[i] = { name: views[i], sub: walk(fp) };
+            
+            var name = views[i];
+            views.splice(i, 1);
+            views.unshift({ name: name, sub: walk(fp) });
+            //views[i] = { name: views[i], sub: walk(fp) };
         }
     }
 

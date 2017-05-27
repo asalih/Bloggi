@@ -6,13 +6,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require("express-session");
-var fs = require("fs");
+const session = require("express-session");
+const fs = require("fs");
+const fileUpload = require('express-fileupload');
 
 var admin = require("./routes/admin")
 
-var app = express();
+const app = express();
 
+app.use(fileUpload());
 global.routingTable = {};
 global.settings = {};
 global.loadRoutes = function () {
@@ -38,9 +40,10 @@ app.engine('html', require('ejs').renderFile);
 var staticPath = path.join(__dirname, 'public');
 app.set("staticPath", staticPath);
 
- 
+
 app.use(function (req, res, next) {
-    var path = routingTable[req.url.split("?").shift()];
+    var shft = req.url.split("?").shift();
+    var path = routingTable[shft] || routingTable[shft.replace(/\/$/, "")];
     if (path != undefined) {
         res.render(path, { title: settings.appTitle });
     }
@@ -93,7 +96,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('error.pug', {
         message: err.message,
         error: {}
     });

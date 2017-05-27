@@ -9,12 +9,27 @@ html
   body
     .masthead
         h1.masthead-title
-            a(href="/") BLOGGI
+            a(href="/") Bloggi App
+        p.masthead-lead Create a blog and manage it easly. Mostly for developers.
+        hr.masthead-hr
+        ul.masthead-nav
+            li.nav-item
+                a.nav-link(href='/') Home
+            li.nav-item
+                a.nav-link(href='/about/') About
+            li.nav-item
+                a.nav-link(href='/contact/') Contact
+        hr.masthead-hr
+        ul.masthead-nav
+            li.nav-item
+                a.nav-link(href="https://github.com/asalih" target="_blank") Github
+            li.nav-item
+                a.nav-link(href="https://twitter.com/ahmets_11" target="_blank") Twitter
     .listing
       block content
       hr
       footer
-        p &copy; #{year} - My Nodejs/Pug Application
+        p &copy; #{year} - My Bloggi Application
 
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous")
     script(src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous")
