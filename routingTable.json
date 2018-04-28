@@ -1,6 +1,9 @@
 {
-  "/": "index.pug",
-  "/about": "about.pug",
-  "/contact": "contact.pug",
-  "/hello": "landingPage.html"
-} 
+  "files": {
+    "/": "index.pug",
+    "/about": "about.pug",
+    "/contact": "contact.pug",
+    "/hello": "html/landingPage.html"
+  },
+  "requires": ["requires/f.js"]
+}

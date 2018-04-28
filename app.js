@@ -10,25 +10,30 @@ const session = require("express-session");
 const fs = require("fs");
 const fileUpload = require('express-fileupload');
 
-var admin = require("./routes/admin")
+var admin = require("./routes/admin");
 
 const app = express();
 
 app.use(fileUpload());
+
 global.routingTable = {};
 global.settings = {};
-global.loadRoutes = function () {
+global.requires = {};
+
+global.loadFilesAndRequires = function () {
     var pth = path.join(__dirname, "routingTable.json");
-    fs.readFile(pth, "utf8", function (e, data) {
-        if (e) throw e;
-        routingTable = JSON.parse(data);
-    });
+    var data = fs.readFileSync(pth, "utf8");
+
+    var routesAndRequires = JSON.parse(data);
+
+        routingTable = routesAndRequires.files;
+        requires = routesAndRequires.requires;
 }
 global.loadSettings = function () {
     var pth = path.join(__dirname, "settings.json");
     settings = JSON.parse(fs.readFileSync(pth, "utf8"));
 }
-global.loadRoutes();
+global.loadFilesAndRequires();
 global.loadSettings();
 
 // view engine setup
@@ -40,6 +45,14 @@ app.engine('html', require('ejs').renderFile);
 var staticPath = path.join(__dirname, 'public');
 app.set("staticPath", staticPath);
 
+var requiresPath = path.join(__dirname, 'requires');
+app.set("requiresPath", requiresPath);
+
+if(typeof(requires) != "undefined"){
+    global.requires.forEach(function(element) {
+        require("./"+element).init(app);
+      });
+}
 
 app.use(function (req, res, next) {
     var shft = req.url.split("?").shift();
@@ -106,6 +119,3 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
 });
-
-
-

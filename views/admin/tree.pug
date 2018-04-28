@@ -15,6 +15,10 @@
 
 ul.mktre.masthead-nav
     li.parent 
+        span.filePath Requires
+        ul
+            +bindData(requires)
+    li.parent 
         span.filePath Views
         ul
             +bindData(views)
@@ -22,5 +26,4 @@ ul.mktre.masthead-nav
         span.filePath Public
         ul
             +bindData(files)
-
 

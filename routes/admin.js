@@ -6,7 +6,6 @@ var express = require('express');
 
 var router = express.Router();
 
-
 /* GET home page. */
 router.get('/', function (req, res) {
     res.render('admin/index.pug');
@@ -19,12 +18,27 @@ router.get("/getDirectories", function (req, res) {
     var staticPath = req.app.get("staticPath");
     var staticTree = walk(staticPath);
 
+    var requiresPath = req.app.get("requiresPath");
+    var requiresTree = walk(requiresPath);
+
     //res.send([viewTree, staticTree]);
-    res.render("admin/tree.pug", { views: viewTree, files: staticTree });
+    res.render("admin/tree.pug", { views: viewTree, files: staticTree, requires:  requiresTree});
 });
 
 router.post("/add", function (req, res) {
+    if(req.body.pth.indexOf("..") > -1){
+        res.send("error");
+        return;
+    }
+
     var pth = path.join(__dirname, "..//", req.body.pth);
+
+    if(!pth.toLocaleLowerCase().startsWith(req.app.get("views").toLocaleLowerCase()) &&
+        !pth.toLocaleLowerCase().startsWith(req.app.get("staticPath").toLocaleLowerCase()) &&
+        !pth.toLocaleLowerCase().startsWith(req.app.get("requiresPath").toLocaleLowerCase())){
+            res.send("error");
+            return;
+    }
 
     fs.exists(pth, function (exists) {
         if (exists) {
@@ -145,8 +159,6 @@ router.post("/fileUpload", function (req, res) {
             res.send('File uploaded!');
         });
     }
-
-     
 });
 
 function walk(dirPath) {
