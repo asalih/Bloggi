@@ -5,21 +5,22 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title #{title} - My Flask/Jade Application
     
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous")
     script(src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous")
     link(rel='stylesheet', type='text/css', href='/admin/login.css')
   body
     .container
         form.form-signin(method="post")
             h2.form-signin-heading Please sign in
             label.sr-only(for='inputEmail') Username
-            input#inputEmail.form-control(type='text', placeholder='Username', required='', autofocus='')
+            input#inputEmail.form-control(type='text', placeholder='Username', required='', autofocus='', name="un")
             label.sr-only(for='inputPassword') Password
-            input#inputPassword.form-control(type='password', placeholder='Password', required='')
+            input#inputPassword.form-control(type='password', placeholder='Password', required='', name="pwd")
             button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
 
-
+            if err
+              span(style="color:red") * Incorrect user name or password.
 
     block scripts

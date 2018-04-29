@@ -21,7 +21,6 @@ router.get("/getDirectories", function (req, res) {
     var requiresPath = req.app.get("requiresPath");
     var requiresTree = walk(requiresPath);
 
-    //res.send([viewTree, staticTree]);
     res.render("admin/tree.pug", { views: viewTree, files: staticTree, requires:  requiresTree});
 });
 
@@ -141,9 +140,13 @@ router.route('/login')
         res.render('admin/login.pug');
     })
     .post(function (req, res) {
-        //user logic here
-        req.session.auth = true;
-        res.redirect("/admin");
+        if(global.settings.user.un == req.body.un &&
+            global.settings.user.pwd == req.body.pwd){
+                req.session.auth = true;
+                res.redirect("/admin");
+            }
+
+        res.render('admin/login.pug', {err: true});
     });
 router.post("/fileUpload", function (req, res) {
     var fp = req.body.currentPath;
@@ -170,8 +173,8 @@ function walk(dirPath) {
         var fp = path.join(dirPath, views[i]);
 
         var stat = fs.lstatSync(fp);
+        
         if (stat && stat.isDirectory()) {
-            
             var name = views[i];
             views.splice(i, 1);
             views.unshift({ name: name, sub: walk(fp) });

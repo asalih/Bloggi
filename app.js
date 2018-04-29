@@ -26,13 +26,14 @@ global.loadFilesAndRequires = function () {
 
     var routesAndRequires = JSON.parse(data);
 
-        routingTable = routesAndRequires.files;
-        requires = routesAndRequires.requires;
+    routingTable = routesAndRequires.files;
+    requires = routesAndRequires.requires;
 }
 global.loadSettings = function () {
     var pth = path.join(__dirname, "settings.json");
     settings = JSON.parse(fs.readFileSync(pth, "utf8"));
 }
+
 global.loadFilesAndRequires();
 global.loadSettings();
 
@@ -72,7 +73,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(staticPath));
-app.use(session({ secret: 'BloggiApp', cookie: { maxAge: 60000 * 20 } }));
+app.use(session({ secret: 'BloggiApp', cookie: { maxAge: 60000 * 20 }, resave: true, saveUninitialized: true }));
 
 app.use("/admin", authChecker);
 app.use("/admin", admin);
