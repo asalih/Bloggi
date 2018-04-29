@@ -10,14 +10,14 @@ $(document).ready(function () {
             return;
         }
         if (editingPath != "routingTable" && editingPath != "settings") {
-            $(".save").text("saving");
+            $(".save-note").text("saving");
             $.ajax({
                 url: "/admin/content",
                 type: "POST",
                 data: { pth: editingPath, file: editor.getValue() },
                 dataType: "text",
                 success: function (data) {
-                    $(".save").text("save");
+                    $(".save-note").text((new Date()).toString());
                 }
             });
         }

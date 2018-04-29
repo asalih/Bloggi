@@ -3,5 +3,27 @@
   "user": {
     "un": "admin",
     "pwd": "1"
-  }
+  },
+  "headers":[
+    {
+      "key": "Content-Security-Policy",
+      "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' ssl.google-analytics.com *.googletagmanager.com stackpath.bootstrapcdn.com code.jquery.com cdnjs.cloudflare.com; style-src 'self' stackpath.bootstrapcdn.com maxcdn.bootstrapcdn.com cdnjs.cloudflare.com *.googleapis.com 'unsafe-inline'; frame-src *.youtube.com *.youtube-nocookie.com *.googletagmanager.com; font-src 'self' maxcdn.bootstrapcdn.com *.gstatic.com; img-src 'self' ssl.google-analytics.com stats.g.doubleclick.net *.googleapis.com data: *.google.com.tr *.google.com; object-src 'self'"
+    },
+    {
+        "key": "X-XSS-Protection",
+        "value": "1; mode=block"
+    },
+    {
+        "key": "Referrer-Policy",
+        "value": "no-referrer"
+    },
+    {
+        "key": "X-Frame-Option",
+        "value": "DENY"
+    },
+    {
+        "key": "Strict-Transport-Security",
+        "value": "max-age=31536000; includeSubDomains"
+    }
+  ]
 }

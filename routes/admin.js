@@ -145,8 +145,9 @@ router.route('/login')
                 req.session.auth = true;
                 res.redirect("/admin");
             }
-
-        res.render('admin/login.pug', {err: true});
+            else{
+                res.render('admin/login.pug', {err: true});
+            }
     });
 router.post("/fileUpload", function (req, res) {
     var fp = req.body.currentPath;
@@ -173,7 +174,7 @@ function walk(dirPath) {
         var fp = path.join(dirPath, views[i]);
 
         var stat = fs.lstatSync(fp);
-        
+
         if (stat && stat.isDirectory()) {
             var name = views[i];
             views.splice(i, 1);

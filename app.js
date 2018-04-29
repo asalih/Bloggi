@@ -34,9 +34,6 @@ global.loadSettings = function () {
     settings = JSON.parse(fs.readFileSync(pth, "utf8"));
 }
 
-global.loadFilesAndRequires();
-global.loadSettings();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', settings.viewEngine);
@@ -49,10 +46,34 @@ app.set("staticPath", staticPath);
 var requiresPath = path.join(__dirname, 'requires');
 app.set("requiresPath", requiresPath);
 
-if(typeof(requires) != "undefined"){
-    global.requires.forEach(function(element) {
-        require("./"+element).init(app);
-      });
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(staticPath));
+app.use(session({ secret: 'BloggiApp', cookie: { maxAge: 60000 * 20 }, resave: true, saveUninitialized: true }));
+
+app.use(function (req, res, next){
+    res.removeHeader("X-Powered-By");
+    
+    global.settings.headers.forEach(function(e){
+        res.header(e.key, e.value);
+    });
+    
+    next();
+});
+
+app.use("/admin", authChecker);
+app.use("/admin", admin);
+function authChecker(req, res, next) {
+    if (req.session.auth || req.path === "/login") {
+        next();
+    }
+    else {
+        res.redirect("/admin/login");
+    }
 }
 
 app.use(function (req, res, next) {
@@ -65,26 +86,6 @@ app.use(function (req, res, next) {
         next();
     }
 });
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(staticPath));
-app.use(session({ secret: 'BloggiApp', cookie: { maxAge: 60000 * 20 }, resave: true, saveUninitialized: true }));
-
-app.use("/admin", authChecker);
-app.use("/admin", admin);
-function authChecker(req, res, next) {
-    if (req.session.auth || req.path === "/login") {
-        next();
-    }
-    else {
-        res.redirect("/admin/login");
-    }
-}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -115,6 +116,17 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+
+/* Settings, requires and  files */
+global.loadFilesAndRequires();
+global.loadSettings();
+
+if(typeof(requires) != "undefined"){
+    global.requires.forEach(function(element) {
+        require("./"+element).init(app);
+      });
+}
+/* eof */
 
 app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
