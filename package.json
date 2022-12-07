@@ -10,10 +10,10 @@
     "name": "asalih"
   },
   "dependencies": {
-    "body-parser": "^1.15.0",
+    "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.0",
     "debug": "^2.2.0",
-    "express": "^4.14.0",
+    "express": "^4.18.2",
     "express-session": "^1.15.3",
     "morgan": "^1.9.1",
     "pug": "^3.0.1",
